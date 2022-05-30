@@ -6,12 +6,12 @@ document.querySelector('#jugar').onclick = manejarRonda
 
 actualizarEstado('Toca el boton Jugar !')
 
-function manejarRonda(){
+function manejarRonda() {
     reiniciarJuego()
     comenzarJuego()
 }
 
-function comenzarJuego(){
+function comenzarJuego() {
     bloquearInputUsuario()
     secuenciaUsuario = []
     actualizarEstado('Turno de la maquina')
@@ -19,69 +19,69 @@ function comenzarJuego(){
     const $cuadro = obtenerCuadroAleatorio()
     secuenciaMaquina.push($cuadro)
 
-    secuenciaMaquina.forEach(function($cuadro, index){
+    secuenciaMaquina.forEach(function($cuadro, index) {
         const RETRASO = (index + 1) * 1000
-        setTimeout(function(){
+        setTimeout(function() {
             resaltar($cuadro)
-        },RETRASO)
+        }, RETRASO)
     })
 
     const RETRASO_JUGADOR = (secuenciaMaquina.length + 1) * 1000
-    setTimeout(function(){
+    setTimeout(function() {
         actualizarEstado('Turno del jugador')
         desbloquearInputUsuario()
-    }, RETRASO_JUGADOR)       
-    
-}  
+    }, RETRASO_JUGADOR)
 
-function bloquearInputUsuario(){
-    document.querySelectorAll('.cuadro').forEach(function($cuadro){
-        $cuadro.onclick = ()=>{}
+}
+
+function bloquearInputUsuario() {
+    document.querySelectorAll('.cuadro').forEach(function($cuadro) {
+        $cuadro.onclick = () => {}
     })
 }
 
-function desbloquearInputUsuario(){
-    document.querySelectorAll('.cuadro').forEach(function($cuadro){
+function desbloquearInputUsuario() {
+    document.querySelectorAll('.cuadro').forEach(function($cuadro) {
         $cuadro.onclick = manejarInputUsuario
     })
 }
 
-function manejarInputUsuario(e){
+function manejarInputUsuario(e) {
     const $cuadro = e.target
     resaltar($cuadro)
     secuenciaUsuario.push($cuadro)
-    
+
     const $cuadroMaquina = secuenciaMaquina[secuenciaUsuario.length - 1]
-    if($cuadroMaquina.id != $cuadro.id){
+    if ($cuadroMaquina.id != $cuadro.id) {
         actualizarEstado('Perdiste! tocar jugar, para jugar de nuevo!')
-        
+
         return
     }
-    if(secuenciaMaquina.length === secuenciaUsuario.length){
+    if (secuenciaMaquina.length === secuenciaUsuario.length) {
         setTimeout(comenzarJuego, 1000)
     }
-    
+
 }
 
-function actualizarEstado(estado){
+function actualizarEstado(estado) {
     const $estado = document.querySelector('#estado')
     $estado.textContent = estado
 }
 
-function obtenerCuadroAleatorio(){
-    const $cuadros = document.querySelectorAll('.cuadro')    
+function obtenerCuadroAleatorio() {
+    const $cuadros = document.querySelectorAll('.cuadro')
     const indice = Math.floor(Math.random() * $cuadros.length)
     return $cuadros[indice]
 }
 
-function resaltar($cuadro){
+function resaltar($cuadro) {
     $cuadro.style.opacity = 1
-    setTimeout(function(){
+    setTimeout(function() {
         $cuadro.style.opacity = 0.5
     }, 500)
 }
 
-function reiniciarJuego(){
+function reiniciarJuego() {
     secuenciaMaquina = []
     secuenciaUsuario = []
     ronda = 0
